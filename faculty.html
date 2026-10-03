@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View faculty profiles, department directories, professor credentials, contact information.">
+    <title>Faculty Directory - College ERP Portal</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+    <!-- Inline favicon SVG -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text y=%2270%22 x=%2220%22 fill=%22white%22 font-family=%22sans-serif%22 font-size=%2260%22 font-weight=%22bold%22>C</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">C</div>
+                <span class="logo-text">EduSphere ERP</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="/dashboard" class="menu-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm9-8.414 7 7V20H5v-7.414l7-7z"/><path d="M9 16.001h6v2H9z"/></svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/students" class="menu-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M12 6c-1.93 0-3.5 1.57-3.5 3.5S10.07 13 12 13s3.5-1.57 3.5-3.5S13.93 6 12 6zm0 5c-.827 0-1.5-.673-1.5-1.5S11.173 8 12 8s1.5.673 1.5 1.5S12.827 11 12 11zm0 3c-3 0-5.8 1.4-5.8 4.2v.8h11.6v-.8c0-2.8-2.8-4.2-5.8-4.2zm-3.8 3c.4-.7 1.8-1 3.8-1s3.4.3 3.8 1H8.2z"/></svg>
+                        Students
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a href="/faculty" class="menu-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-8 6c2.21 0 4-1.79 4-4S10.21 4 8 4 4 2.79 4 5s1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 8h-2c-2.76 0-5 2.24-5 5v2h12v-2c0-2.76-2.24-5-5-5zm3 5H11v-.5c0-1.38 1.12-2.5 2.5-2.5h2c1.38 0 2.5 1.12 2.5 2.5v.5zm-11-5H5c-2.76 0-5 2.24-5 5v2h8v-2c0-2.76-2.24-5-5-5zm-1 5H2v-.5C2 16.12 3.12 15 4.5 15h1c1.38 0 2.5 1.12 2.5 2.5v.5z"/></svg>
+                        Faculty
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/attendance" class="menu-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 4h-3V2h-2v2h-4V2H8v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm-7 15H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V9h10v2z"/></svg>
+                        Attendance
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <img src="{{ user.avatar or 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100&h=100' }}" alt="Profile" class="user-avatar">
+                <div class="user-info">
+                    <div class="user-name">{{ user.name }}</div>
+                    <div class="user-role" style="text-transform: capitalize;">{{ user.role }}</div>
+                </div>
+                <a href="/logout" class="logout-btn" title="Log Out">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M16 13v-2H7V9h9V7l5 4-5 4zM4 3h9v2H4v14h9v2H4c-1.103 0-2-.897-2-2V5c0-1.103.897-2 2-2z"/></svg>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            <header class="top-navbar">
+                <div class="page-title">
+                    <h1>Faculty Directory</h1>
+                    <p>Register and coordinate academic staff profiles</p>
+                </div>
+                
+                <div class="navbar-actions">
+                    {% if user.role == 'admin' %}
+                    <button class="btn btn-primary" onclick="openModal()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Add Faculty Member
+                    </button>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Notification Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div style="background-color: {% if category == 'success' %}var(--success-light){% else %}var(--danger-light){% endif %}; color: {% if category == 'success' %}var(--success-dark){% else %}var(--danger-dark){% endif %}; padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg); font-weight: 600; border: 1px solid rgba(0,0,0,0.05);">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Search and filters -->
+            <form method="GET" action="/faculty" class="card flex align-center justify-between gap-md" style="flex-wrap: wrap; margin-bottom: var(--spacing-lg); padding: var(--spacing-md);">
+                <div class="search-box" style="width: 320px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" name="search" id="searchInput" placeholder="Search by name or designation..." value="{{ search or '' }}">
+                </div>
+
+                <div class="flex gap-md" style="align-items: center;">
+                    <select class="form-control" name="department" id="deptFilter" style="width: 200px; padding: 8px 12px;" onchange="this.form.submit()">
+                        <option value="all" {% if selected_dept == 'all' %}selected{% endif %}>All Departments</option>
+                        <option value="Computer Science" {% if selected_dept == 'Computer Science' %}selected{% endif %}>Computer Science</option>
+                        <option value="Mechanical Eng." {% if selected_dept == 'Mechanical Eng.' %}selected{% endif %}>Mechanical Eng.</option>
+                        <option value="Electrical Eng." {% if selected_dept == 'Electrical Eng.' %}selected{% endif %}>Electrical Eng.</option>
+                        <option value="Civil Eng." {% if selected_dept == 'Civil Eng.' %}selected{% endif %}>Civil Eng.</option>
+                    </select>
+                    
+                    <button type="submit" class="btn btn-outline" style="padding: 8px 16px;">Filter</button>
+                </div>
+            </form>
+
+            <!-- Faculty Grid Cards -->
+            <section class="faculty-grid animate-fade-in" id="facultyGrid">
+                {% for fac in faculty %}
+                <div class="faculty-card" data-id="{{ fac.faculty_id }}" data-name="{{ fac.name }}" data-dept="{{ fac.department }}" data-desig="{{ fac.designation }}">
+                    {% if user.role == 'admin' %}
+                    <div style="text-align: right; margin-bottom: -15px; position: relative; z-index: 10;">
+                        <button class="btn-icon delete" onclick="deleteFaculty('{{ fac.faculty_id }}')" title="Delete Profile" style="border: none; background: transparent; padding: 4px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                    {% endif %}
+                    <img src="{{ fac.avatar or 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150' }}" alt="{{ fac.name }}" class="faculty-avatar">
+                    <h3 class="faculty-name">{{ fac.name }}</h3>
+                    <span class="faculty-dept">{{ fac.department }}</span>
+                    <div class="faculty-meta">
+                        <strong>{{ fac.designation }}</strong>
+                        <div style="margin-top: 10px;">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 14px; height: 14px; color: var(--text-muted);"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+                                {{ fac.email }}
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 14px; height: 14px; color: var(--text-muted);"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.502-5.176-3.854-6.677-8.677l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
+                                {{ fac.phone }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: var(--spacing-xl);">
+                    No faculty profiles found.
+                </div>
+                {% endfor %}
+            </section>
+        </main>
+    </div>
+
+    <!-- Reusable Add Faculty Dialog Modal -->
+    {% if user.role == 'admin' %}
+    <div class="modal-backdrop" id="facultyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Register New Faculty Profile</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="facultyForm" action="/faculty" method="POST">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="facId">Faculty ID / Roll</label>
+                            <input type="text" id="facId" name="faculty_id" class="form-control" placeholder="e.g. FAC2026190" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="facName">Full Name</label>
+                            <input type="text" id="facName" name="name" class="form-control" placeholder="Dr. John Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="facDept">Department</label>
+                            <select id="facDept" name="department" class="form-control">
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Mechanical Eng.">Mechanical Eng.</option>
+                                <option value="Electrical Eng.">Electrical Eng.</option>
+                                <option value="Civil Eng.">Civil Eng.</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="facDesig">Designation</label>
+                            <input type="text" id="facDesig" name="designation" class="form-control" placeholder="e.g. Associate Professor" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="facEmail">Email Address</label>
+                            <input type="email" id="facEmail" name="email" class="form-control" placeholder="john.doe@edu.org" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="facPhone">Phone Number</label>
+                            <input type="text" id="facPhone" name="phone" class="form-control" placeholder="+91 98765-43210" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Scripting for controls -->
+    <script>
+        // Modal triggers
+        function openModal() {
+            document.getElementById('facultyModal').classList.add('active');
+            document.getElementById('facultyForm').reset();
+        }
+
+        function closeModal() {
+            document.getElementById('facultyModal').classList.remove('active');
+        }
+
+        // Delete simulation via AJAX
+        function deleteFaculty(facId) {
+            if (confirm("Are you sure you want to remove this faculty profile?")) {
+                const formData = new FormData();
+                formData.append('action', 'delete');
+                formData.append('faculty_id', facId);
+
+                fetch('/faculty', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert("Failed to delete faculty profile.");
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

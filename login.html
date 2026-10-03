@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="College ERP Management System Login Portal. Authenticate as Admin, Faculty, or Student.">
+    <title>Login - College ERP Portal</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+    <!-- Inline favicon SVG -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text y=%2270%22 x=%2220%22 fill=%22white%22 font-family=%22sans-serif%22 font-size=%2260%22 font-weight=%22bold%22>C</text></svg>">
+</head>
+<body class="login-body">
+    <div class="login-card animate-fade-in">
+        <div class="login-header">
+            <div class="logo">
+                <div class="logo-icon">C</div>
+            </div>
+            <h2>EduSphere ERP</h2>
+            <p>Welcome back! Please enter your credentials</p>
+        </div>
+
+        <!-- Dynamic Error Alert -->
+        {% if error %}
+        <div style="background-color: var(--danger-light); color: var(--danger-dark); padding: var(--spacing-sm); border-radius: var(--radius-sm); margin-bottom: var(--spacing-md); font-size: 0.85rem; font-weight: 600; text-align: center; border: 1px solid rgba(244,63,94,0.2);">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Role Selector tabs -->
+        <div class="role-selector" id="roleSelector">
+            <div class="role-tab active" data-role="student" onclick="setRole('student')">Student</div>
+            <div class="role-tab" data-role="faculty" onclick="setRole('faculty')">Faculty</div>
+            <div class="role-tab" data-role="admin" onclick="setRole('admin')">Admin</div>
+        </div>
+
+        <form action="/login" method="POST" id="loginForm">
+            <!-- Hidden input to store selected role -->
+            <input type="hidden" name="role" id="userRole" value="student">
+            
+            <div class="form-group">
+                <label for="username" id="usernameLabel">Student Roll Number / Email</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="e.g. STU2026001" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <div class="justify-between flex align-center mb-md" style="margin-bottom: 4px;">
+                    <label for="password" style="margin-bottom: 0;">Password</label>
+                    <a href="#" class="forgot-link" style="font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 600;">Forgot Password?</a>
+                </div>
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+                    <button type="button" onclick="togglePassword()" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted);">
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 18px; height: 18px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group flex align-center" style="gap: 8px;">
+                <input type="checkbox" id="remember" style="width: 16px; height: 16px; accent-color: var(--primary);">
+                <label for="remember" style="margin-bottom: 0; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; user-select: none;">Keep me logged in</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--spacing-sm); padding: 12px;">
+                Sign In
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: var(--spacing-lg); font-size: 0.85rem; color: var(--text-muted);">
+            Need help? Contact college administration support.
+        </div>
+    </div>
+
+    <script>
+        // Set input fields and text based on role selection
+        function setRole(role) {
+            // Update active class on tabs
+            const tabs = document.querySelectorAll('.role-tab');
+            tabs.forEach(tab => {
+                if (tab.dataset.role === role) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            // Store role in hidden input
+            document.getElementById('userRole').value = role;
+
+            // Customize labels and placeholders based on selected role
+            const usernameLabel = document.getElementById('usernameLabel');
+            const usernameInput = document.getElementById('username');
+            
+            if (role === 'student') {
+                usernameLabel.textContent = 'Student Roll Number';
+                usernameInput.placeholder = 'e.g. STU2026001';
+            } else if (role === 'faculty') {
+                usernameLabel.textContent = 'Faculty ID';
+                usernameInput.placeholder = 'e.g. FAC2026101';
+            } else if (role === 'admin') {
+                usernameLabel.textContent = 'Administrator Username';
+                usernameInput.placeholder = 'e.g. admin';
+            }
+        }
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                // Update SVG to eye-slash
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                `;
+            } else {
+                passInput.type = 'password';
+                // Update SVG back to eye
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                `;
+            }
+        }
+
+        // Load correct active role from load
+        window.onload = function() {
+            setRole('student');
+        };
+    </script>
+</body>
+</html>
